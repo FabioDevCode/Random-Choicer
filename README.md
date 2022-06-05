@@ -1,21 +1,24 @@
-# RandomChoicer
+<div align="center">
+<img height="100px" width="auto" src="./public/random.svg" />
+</div>
+<h1 align="center" style="display ">
+  RANDOM<br>
+  CHOICER
+</h1>
 
-This template should help get you started developing with Vue 3 in Vite.
+<div align="center">
+  <img height="50px" width="80px" src="https://vitejs.dev/logo.svg" /> 
+  <img height="50px" width="80px" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vuejs/vuejs-original.svg" />
+</div>
 
-## Project Setup
+<br>
 
-```sh
-npm install
-```
+<div align="center">
+  Application Vite + Vue.JS 3
 
-### Compile and Hot-Reload for Development
+  Permet de créer un liste puis de faire un choix aléatoire parmi celle-ci.
+</div>
 
-```sh
-npm run dev
-```
-
-### Compile and Minify for Production
-
-```sh
-npm run build
-```
+<div align="center">
+  
+</div>
