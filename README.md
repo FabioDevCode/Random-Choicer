@@ -14,7 +14,7 @@
 <br>
 
 <div align="center">
-  Application Vite + Vue.JS 3
+  Application Vite + Vue 3
 
   Permet de créer un liste puis de faire un choix aléatoire parmi celle-ci.
 </div>
