@@ -1,5 +1,5 @@
 <div align="center">
-  <img height="100px" width="auto" src="./public/RandomChoicerIcon.png" />
+  <img height="150px" width="auto" src="./public/RandomChoicerIcon.png" />
 </div>
 
 ##
