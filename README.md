@@ -1,10 +1,9 @@
-<div align="center">
+<h1 align="center">
   <img height="150px" width="auto" src="./public/RandomChoicerIcon.png" />
-</div>
-
-##
+</h1>
 
 <br>
+
 <div align="center">
   <img height="50px" width="80px" src="https://vitejs.dev/logo.svg" /> 
   <img height="50px" width="80px" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vuejs/vuejs-original.svg" />
