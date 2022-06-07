@@ -20,6 +20,12 @@
                 </button>
             </li>
         </ul>
+
+        <div v-if="list.length > 1">
+            <button class="reset_list" @click="resetList()">
+                Clear list
+            </button>
+        </div>
     </main>
 
     <footer>
@@ -61,6 +67,10 @@
                 list.forEach(el => {
                     el.classList.remove('active');
                 });
+            },
+
+            resetList() {
+                this.list = [];
             },
 
             randomChoice() {
@@ -269,7 +279,28 @@
     .proposition button svg {
         fill: #F3F3F3;
         height: 60%;
+        z-index: 5;
     }
+
+    .reset_list {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        margin: 25px 0;
+        height: 50px;
+        width: 155px;
+        border-radius: 50px;
+        font-family: 'Righteous', cursive, Helvetica, sans-serif;
+        font-size: 1.2em;
+        background-color: crimson;
+        color: #F3F3F3;
+    }
+
+    .reset_list:active {
+        transform: scale(.95);
+    }
+
 
     /*------FOOTER------*/
 
@@ -285,7 +316,7 @@
     .active {
         transform: scale(1.1);
         background-color: #41B883;
-
+        z-index: 10;
     }
 
 </style>
