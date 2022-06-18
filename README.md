@@ -20,3 +20,6 @@
 </div>
 
 <br>
+
+<img align="right" src="https://badgen.net/badge/Made with ❤️ by/Fabio R. Lopes/218c74?icon=" />
+
