@@ -26,10 +26,18 @@
                 Clear list
             </button>
         </div>
+
+        <input class="input_saver" v-if="saver" v-model="name_list" type="text" placeholder="Name of list...">
+
+        <div class="load_saver" v-if="saver">
+            <button id="load" @click="loadList()">Load List</button>
+            <button id="save" @click="saveList()">Save List</button>
+        </div>
     </main>
 
     <footer>
-        <p>Coded by <a target="_blank" href="https://www.linkedin.com/in/fabio-ramoslopes/">Fabio R. LOPES</a></p>
+        <p><button @click="activeSaver()" class="coded">Coded</button> by <a target="_blank" href="https://www.linkedin.com/in/fabio-ramoslopes/">Fabio R. LOPES</a>
+        </p>
     </footer>
 </template>
 
@@ -41,10 +49,25 @@
             return {
                 inputValue: '',
                 list: [],
-
+                saver: false,
+                name_list: '',
+                list_saved: [],
+            }
+        },
+        mounted() {
+            if(!localStorage.getItem('rc_list_saved')) {
+                localStorage.setItem('rc_list_saved', JSON.stringify(this.list_saved));
+            } else {
+                this.list_saved = JSON.parse(localStorage.getItem('rc_list_saved'));
             }
         },
         methods: {
+            activeSaver() {
+                this.saver = !this.saver;
+
+                const btn_coded = document.querySelector('.coded');
+                btn_coded.classList.toggle('bgsaver');
+            },
             addToList() {
                 if(this.inputValue.length === 0 || this.list.includes(this.inputValue)) {
                     this.inputValue = '';
@@ -87,6 +110,16 @@
 
                 const choice = document.querySelectorAll('.proposition')[indexSelected];
                 choice.classList.add('active');
+            },
+            saveList() {
+                this.list_saved.push(this.name_list);
+                localStorage.setItem(this.name_list, JSON.stringify(this.list));
+                localStorage.setItem('rc_list_saved', JSON.stringify(this.list_saved));
+                this.name_list = '';
+            },
+            loadList() {
+                this.list = JSON.parse(localStorage.getItem(this.name_list));
+                this.name_list = '';
             }
         },
     }
@@ -222,7 +255,7 @@
     }
 
     #input_box input:focus {
-        box-shadow: 0 0 6px 2px rgba(65, 184, 131, .7);
+        box-shadow: 0 0 8px 3px rgba(65, 184, 131, .7);
         border: 1px solid #41B883;
     }
 
@@ -246,6 +279,50 @@
     #list {
         width: 310px;
         height: max-content;
+    }
+
+    input.input_saver {
+        background-color: whitesmoke;
+        margin: 25px 0 12px 0;
+        width: 100%;
+        height: 50px;
+        border-radius: 50px;
+        overflow: hidden;
+        font-size: 1em;
+        outline: none;
+        text-align: center;
+        font-family: 'Righteous', cursive, Helvetica, sans-serif;
+        font-size: 1.1em;
+        padding: 0 15px;
+    }
+
+    input.input_saver:focus {
+        box-shadow: 0 0 8px 3px rgba(34, 116, 165, .7);
+        border: 1px solid #2274A5;
+    }
+
+    .load_saver {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        height: 50px;
+        border-radius: 50px;
+    }
+
+    #load, #save {
+        cursor: pointer;
+        font-family: 'Righteous', cursive, Helvetica, sans-serif;
+        letter-spacing: .5px;
+        font-size: 1em;
+        width: 48%;
+        height: 100%;
+        border-radius: 50px;
+        background-color: #2274A5;
+        color: white;
+    }
+
+    .load_saver button:active {
+        transform: scale(.92);
     }
 
     .proposition {
@@ -287,12 +364,12 @@
         justify-content: center;
         align-items: center;
         cursor: pointer;
-        margin: 25px 0;
+        margin: 25px 0 0 0;
         height: 50px;
         width: 155px;
         border-radius: 50px;
         font-family: 'Righteous', cursive, Helvetica, sans-serif;
-        font-size: 1.2em;
+        font-size: 1.1em;
         background-color: crimson;
         color: #F3F3F3;
     }
@@ -300,7 +377,6 @@
     .reset_list:active {
         transform: scale(.95);
     }
-
 
     /*------FOOTER------*/
 
@@ -311,6 +387,25 @@
         display: flex;
         justify-content: center;
         align-items: center;
+    }
+
+    .coded {
+        cursor: pointer;
+        font-family: 'Righteous', cursive, Helvetica, sans-serif;
+        font-size: 1em;
+        background-color: #41B883;
+        border-radius: 50px;
+        padding: 2px 8px;
+        margin: 0 2px;
+    }
+
+    .bgsaver {
+        background-color: #2274A5;
+        color: white;
+    }
+
+    .coded:active {
+        transform: scale(.92);
     }
 
     .active {
