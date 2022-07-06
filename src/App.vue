@@ -21,11 +21,9 @@
             </li>
         </ul>
 
-        <div v-if="list.length > 1">
-            <button class="reset_list" @click="resetList()">
-                Clear list
-            </button>
-        </div>
+        <button class="reset_list" v-if="list.length > 1" @click="resetList()">
+            Clear list
+        </button>
 
         <input class="input_saver" v-if="saver" v-model="name_list" type="text" placeholder="Name of list...">
 
@@ -102,14 +100,27 @@
                 }
 
                 const indexSelected = Math.floor(Math.random() * ((this.list.length) - 0) + 0);
-
                 const list = document.querySelectorAll('.proposition');
+
                 list.forEach(el => {
                     el.classList.remove('active');
                 });
 
-                const choice = document.querySelectorAll('.proposition')[indexSelected];
-                choice.classList.add('active');
+                for(let i = 0; i < list.length; i++) {
+                    if(i % 2 == 0) { list[i].classList.add('animate')}
+                    else { list[i].classList.add('animate2')}
+                }
+
+                setTimeout(() => {
+                    list.forEach(el => {
+                        el.classList.remove('animate');
+                        el.classList.remove('animate2');
+                    })
+
+                    const choice = document.querySelectorAll('.proposition')[indexSelected];
+                    choice.classList.add('active');
+                }, "2000");
+
             },
             saveList() {
                 this.list_saved.push(this.name_list);
@@ -118,8 +129,10 @@
                 this.name_list = '';
             },
             loadList() {
-                this.list = JSON.parse(localStorage.getItem(this.name_list));
-                this.name_list = '';
+                if(localStorage.getItem(this.name_list)) {
+                    this.list = JSON.parse(localStorage.getItem(this.name_list));
+                    this.name_list = '';
+                }
             }
         },
     }
@@ -233,8 +246,6 @@
 
     #input_box {
         position: relative;
-        background-color: #F3F3F3;
-        background-color: tomato;
         height: 50px;
         width: 310px;
         border-radius: 50px;
@@ -245,6 +256,7 @@
 
     #input_box input {
         font-family: 'Righteous', cursive, Helvetica, sans-serif;
+        background-color: #F3F3F3;
         font-size: 1em;
         height: 100%;
         width: 310px;
@@ -292,7 +304,7 @@
         outline: none;
         text-align: center;
         font-family: 'Righteous', cursive, Helvetica, sans-serif;
-        font-size: 1.1em;
+        font-size: 1em;
         padding: 0 15px;
     }
 
@@ -394,6 +406,7 @@
         font-family: 'Righteous', cursive, Helvetica, sans-serif;
         font-size: 1em;
         background-color: #41B883;
+        color: #181818;
         border-radius: 50px;
         padding: 2px 8px;
         margin: 0 2px;
@@ -414,4 +427,75 @@
         z-index: 10;
     }
 
+    .bg_tomato {
+        background-color: tomato;
+    }
+
+    .animate {
+        animation: animChoicer 2s ease-in-out;
+    }
+
+    .animate2 {
+        animation: animChoicer2 2s ease-in-out;
+    }
+
+    @keyframes animChoicer {
+        0% {
+            transform: scale(.95);
+        }
+        12.5% {
+            transform: scale(1.05);
+        }
+        25% {
+            transform: scale(.95);
+        }
+        37.5% {
+            transform: scale(1.05);
+        }
+        50% {
+            transform: scale(.95);
+        }
+        62.5% {
+            transform: scale(1.05);
+        }
+        75% {
+            transform: scale(.95);
+        }
+        87.5% {
+            transform: scale(1.05);
+        }
+        100% {
+            transform: scale(.95);
+        }
+    }
+
+    @keyframes animChoicer2 {
+        0% {
+            transform: scale(1.05);
+        }
+        12.5% {
+            transform: scale(.95);
+        }
+        25% {
+            transform: scale(1.05);
+        }
+        37.5% {
+            transform: scale(.95);
+        }
+        50% {
+            transform: scale(1.05);
+        }
+        62.5% {
+            transform: scale(.95);
+        }
+        75% {
+            transform: scale(1.05);
+        }
+        87.5% {
+            transform: scale(.95);
+        }
+        100% {
+            transform: scale(1.05);
+        }
+    }
 </style>
