@@ -119,6 +119,11 @@
 
                     const choice = document.querySelectorAll('.proposition')[indexSelected];
                     choice.classList.add('active');
+                    choice.scrollIntoView({
+                        behavior: "smooth",
+                        block: "center",
+                        inline: "center"
+                    });
                 }, "2000");
 
             },
