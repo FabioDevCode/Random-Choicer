@@ -144,9 +144,11 @@
 
             },
             saveList() {
-                this.list_saved.push(this.name_list);
+                if(!this.list_saved.includes(this.name_list)) {
+                    this.list_saved.push(this.name_list);
+                    localStorage.setItem('rc_list_saved', JSON.stringify(this.list_saved));
+                }
                 localStorage.setItem(this.name_list, JSON.stringify(this.list));
-                localStorage.setItem('rc_list_saved', JSON.stringify(this.list_saved));
                 this.name_list = '';
             },
             loadList() {
