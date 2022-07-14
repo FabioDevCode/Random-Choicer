@@ -21,21 +21,24 @@
             </li>
         </transition-group>
 
-        <button class="reset_list" v-if="list.length > 1" @click="resetList()">
-            Clear list
-        </button>
+        <transition name="slide-fade">
+            <button class="reset_list" v-if="list.length > 1" @click="resetList()">Clear list</button>
+        </transition>
 
-        <input class="input_saver" v-if="saver" v-model="name_list" type="text" placeholder="Name of list...">
+        <transition name="slide-fade">
+            <input class="input_saver" v-if="saver" v-model="name_list" type="text" placeholder="Name of list...">
+        </transition>
 
-        <div class="load_saver" v-if="saver">
-            <button id="load" @click="loadList()">Load List</button>
-            <button id="save" @click="saveList()">Save List</button>
-        </div>
+        <transition name="slide-fade">
+            <div class="load_saver" v-if="saver">
+                <button id="load" @click="loadList()">Load List</button>
+                <button id="save" @click="saveList()">Save List</button>
+            </div>
+        </transition>
     </main>
 
     <footer>
-        <p><button @click="activeSaver()" class="coded">Coded</button> by <a target="_blank" href="https://www.linkedin.com/in/fabio-ramoslopes/">Fabio R. LOPES</a>
-        </p>
+        <p><button @click="activeSaver()" class="coded">Coded</button> by <a target="_blank" href="https://www.linkedin.com/in/fabio-ramoslopes/">Fabio R. LOPES</a></p>
     </footer>
 </template>
 
@@ -99,7 +102,13 @@
 
             },
             resetList() {
-                this.list = [];
+                const list = document.querySelectorAll('.proposition');
+                list.forEach(el => {
+                    el.classList.add('delete-item');
+                })
+                setTimeout(() => {
+                    this.list = [];
+                }, 450);
             },
             randomChoice() {
                 if(this.list.length <= 1) {
@@ -468,7 +477,7 @@
     }
 
     .delete-item {
-        animation: delete-out 500ms;
+        animation: delete-out 500ms forwards;
     }
     @keyframes delete-out {
         0% {
@@ -479,8 +488,22 @@
         }
         100% {
             transform: scale(0);
+            display: none;
         }
     }
+
+    .slide-fade-enter-active {
+        transition: all 400ms ease-out;
+    }
+    .slide-fade-leave-active {
+        transition: all 350ms ease-in;
+    }
+    .slide-fade-enter-from,
+    .slide-fade-leave-to {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+
 
 
     @keyframes animChoicer {
