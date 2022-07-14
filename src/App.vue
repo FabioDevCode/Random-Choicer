@@ -80,20 +80,27 @@
                 this.list.push(this.inputValue);
                 this.inputValue = '';
             },
-
             deleteElementList(prop) {
-                this.list.splice(this.list.indexOf(prop), 1);
-
+                const indexToDel = this.list.indexOf(prop);
                 const list = document.querySelectorAll('.proposition');
                 list.forEach(el => {
                     el.classList.remove('active');
                 });
-            },
 
+                const deleted = document.querySelectorAll('.proposition')[indexToDel]
+                deleted.classList.add('delete-item');
+
+                setTimeout(() => {
+                    this.list.splice(indexToDel, 1);
+                    list.forEach(el => {
+                    el.classList.remove('delete-item');
+                })
+                }, 500);
+
+            },
             resetList() {
                 this.list = [];
             },
-
             randomChoice() {
                 if(this.list.length <= 1) {
                     return;
@@ -444,11 +451,9 @@
         animation: animChoicer2 2s ease-in-out;
     }
 
+
     .bounce-enter-active {
-        animation: bounce-in .5s;
-    }
-    .bounce-leave-active {
-        animation: bounce-in .5s reverse;
+        animation: bounce-in 500ms;
     }
     @keyframes bounce-in {
         0% {
@@ -461,6 +466,22 @@
             transform: scale(1);
         }
     }
+
+    .delete-item {
+        animation: delete-out 500ms;
+    }
+    @keyframes delete-out {
+        0% {
+            transform: scale(1);
+        }
+        50% {
+            transform: scale(1.1);
+        }
+        100% {
+            transform: scale(0);
+        }
+    }
+
 
     @keyframes animChoicer {
         0% {
