@@ -21,9 +21,7 @@
             </li>
         </transition-group>
 
-        <transition name="slide-fade">
-            <button class="reset_list" v-if="list.length > 1" @click="resetList()">Clear list</button>
-        </transition>
+        <button class="reset_list" v-if="list.length > 1" @click="resetList()">Clear list</button>
 
         <transition name="slide-fade">
             <input class="input_saver" v-if="saver" v-model="name_list" type="text" placeholder="Name of list...">
@@ -498,15 +496,13 @@
         transition: all 400ms ease-out;
     }
     .slide-fade-leave-active {
-        transition: all 350ms ease-in;
+        transition: all 400ms ease-in;
     }
     .slide-fade-enter-from,
     .slide-fade-leave-to {
         transform: translateY(20px);
         opacity: 0;
     }
-
-
 
     @keyframes animChoicer {
         0% {
