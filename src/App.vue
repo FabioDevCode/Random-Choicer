@@ -138,7 +138,7 @@
                         block: "center",
                         inline: "center"
                     });
-                }, "2000");
+                }, "3000");
 
             },
             saveList() {
@@ -453,11 +453,11 @@
     }
 
     .animate {
-        animation: animChoicer 2s ease-in-out;
+        animation: animChoicer 3s ease-in-out backwards;
     }
 
     .animate2 {
-        animation: animChoicer2 2s ease-in-out;
+        animation: animChoicer2 3s ease-in-out backwards;
     }
 
 
