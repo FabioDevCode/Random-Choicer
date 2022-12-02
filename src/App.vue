@@ -24,13 +24,27 @@
         <button class="reset_list" v-if="list.length > 1" @click="resetList()">Clear list</button>
 
         <transition name="slide-fade">
-            <input class="input_saver" v-if="saver" v-model="name_list" type="text" placeholder="Name of list...">
+            <form @submit.prevent  class="load_saver" v-if="saver">
+                <input class="input_saver" v-model="name_list" name="input_saver" type="text" placeholder="Name of list...">
+                <button id="save" @click="saveList()">Save</button>
+            </form>
+        </transition>
+
+        <transition name="slide-fade">
+            <ul id="own_list" v-if="shower">
+                <li :key="list_saved.indexOf(prop)" v-for="prop in list_saved" class="a_list">
+                    <p class="name_list" @click="showThisList(prop)"> {{ prop }} </p>
+                    <button @click="deleteThisList(prop)">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path d="M135.2 17.7C140.6 6.8 151.7 0 163.8 0H284.2c12.1 0 23.2 6.8 28.6 17.7L320 32h96c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 96 0 81.7 0 64S14.3 32 32 32h96l7.2-14.3zM32 128H416V448c0 35.3-28.7 64-64 64H96c-35.3 0-64-28.7-64-64V128zm96 64c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16z"/></svg>
+                    </button>
+                </li>
+            </ul>
         </transition>
 
         <transition name="slide-fade">
             <div class="load_saver" v-if="saver">
-                <button id="load" @click="loadList()">Load List</button>
-                <button id="save" @click="saveList()">Save List</button>
+                <button v-if="!shower" id="load" @click="loadOwnList()">Show your lists</button>
+                <button v-if="shower" id="hide" @click="loadOwnList()">Hide your lists</button>
             </div>
         </transition>
     </main>
@@ -51,6 +65,7 @@
                 saver: false,
                 name_list: '',
                 list_saved: [],
+                shower: false,
             }
         },
         mounted() {
@@ -64,11 +79,15 @@
             activeSaver() {
                 this.saver = !this.saver;
 
+                if(this.shower === true) {
+                    this.shower = !this.shower;
+                };
+
                 const btn_coded = document.querySelector('.coded');
                 btn_coded.classList.toggle('bgsaver');
             },
             addToList() {
-                if(this.inputValue.length === 0 || this.list.includes(this.inputValue)) {
+                if(this.inputValue.length === 0 || this.list.includes(this.inputValue.trim())) {
                     this.inputValue = '';
                     return;
                 }
@@ -78,7 +97,7 @@
                     el.classList.remove('active');
                 });
 
-                this.list.push(this.inputValue);
+                this.list.push(this.inputValue.trim());
                 this.inputValue = '';
             },
             deleteElementList(prop) {
@@ -138,7 +157,7 @@
                         block: "center",
                         inline: "center"
                     });
-                }, "2500");
+                }, "2550");
 
             },
             saveList() {
@@ -148,12 +167,61 @@
                 }
                 localStorage.setItem(this.name_list, JSON.stringify(this.list));
                 this.name_list = '';
+
+                Toastify({
+                    text: "Your list has been saved",
+                    duration: 4000,
+                    newWindow: true,
+                    gravity: "bottom", // `top` or `bottom`
+                    position: "center", // `left`, `center` or `right`
+                    stopOnFocus: true, // Prevents dismissing of toast on hover
+                    style: {
+                        background: "#329267",
+                        color: "#222",
+                    }
+                }).showToast();
             },
-            loadList() {
-                if(localStorage.getItem(this.name_list)) {
-                    this.list = JSON.parse(localStorage.getItem(this.name_list));
-                    this.name_list = '';
+            loadOwnList() {
+                if(this.list_saved.length > 0) {
+                    this.shower = !this.shower;
                 }
+            },
+            showThisList(name_list) {
+                if(localStorage.getItem(name_list)) {
+                    this.list = JSON.parse(localStorage.getItem(name_list));
+                }
+                this.shower = !this.shower;
+                this.saver = !this.saver;
+                const btn_coded = document.querySelector('.coded');
+                btn_coded.classList.toggle('bgsaver');
+            },
+            deleteThisList(name_list) {
+                const response = window.confirm(`Are you sure do you want to delete the list : ${name_list}`);
+
+                if(!response) {
+                    return;
+                }
+
+                if(localStorage.getItem('rc_list_saved')) {
+                    const updatedList = JSON.parse(localStorage.getItem('rc_list_saved'));
+                    updatedList.splice(updatedList.indexOf(name_list), 1);
+                    localStorage.setItem('rc_list_saved', JSON.stringify(updatedList));
+                    localStorage.removeItem(name_list);
+                    this.list_saved = JSON.parse(localStorage.getItem('rc_list_saved'));
+                }
+
+                Toastify({
+                    text: "Your list has been deleted",
+                    duration: 4000,
+                    newWindow: true,
+                    gravity: "bottom", // `top` or `bottom`
+                    position: "center", // `left`, `center` or `right`
+                    stopOnFocus: true, // Prevents dismissing of toast on hover
+                    style: {
+                        background: "#329267",
+                        color: "#222",
+                    }
+                }).showToast();
             }
         },
     }
@@ -316,17 +384,19 @@
 
     input.input_saver {
         background-color: whitesmoke;
-        margin: 25px 0 12px 0;
+        /* margin: 25px 0 12px 0 */
         width: 100%;
         height: 50px;
         border-radius: 50px;
         overflow: hidden;
         font-size: 1em;
         outline: none;
-        text-align: center;
+        text-align: left;
+        padding-left: 20px;
+        padding-right: 102px;
         font-family: 'Righteous', cursive, Helvetica, sans-serif;
+        font-style: italic;
         font-size: 1em;
-        padding: 0 15px;
     }
 
     input.input_saver:focus {
@@ -335,6 +405,8 @@
     }
 
     .load_saver {
+        margin: 12px 0 0 0;
+        position: relative;
         display: flex;
         justify-content: space-between;
         width: 100%;
@@ -342,20 +414,76 @@
         border-radius: 50px;
     }
 
-    #load, #save {
+    #save {
+        position: absolute;
+        right: 0;
         cursor: pointer;
         font-family: 'Righteous', cursive, Helvetica, sans-serif;
         letter-spacing: .5px;
         font-size: 1em;
-        width: 48%;
+        width: 30%;
         height: 100%;
         border-radius: 50px;
         background-color: #2274A5;
         color: white;
     }
 
+    #load {
+        cursor: pointer;
+        font-family: 'Righteous', cursive, Helvetica, sans-serif;
+        letter-spacing: .5px;
+        font-size: 1em;
+        width: 100%;
+        height: 100%;
+        border-radius: 50px;
+        background-color: #2274A5;
+        color: white;
+    }
+
+    #hide {
+        cursor: pointer;
+        font-family: 'Righteous', cursive, Helvetica, sans-serif;
+        letter-spacing: .5px;
+        font-size: 1em;
+        width: 100%;
+        height: 100%;
+        border-radius: 50px;
+        background-color: #18374c;
+        color: whitesmoke;
+    }
+
+    #delete {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        font-family: 'Righteous', cursive, Helvetica, sans-serif;
+        letter-spacing: .5px;
+        font-size: 1em;
+        width: 30%;
+        height: 100%;
+        border-radius: 50px;
+        background-color: crimson;
+        color: white;
+    }
+
+    #delete svg {
+        height: 42%;
+        fill: white;
+    }
+
     .load_saver button:active {
         transform: scale(.92);
+    }
+
+    .load_saver select {
+        font-family: 'Righteous', cursive, Helvetica, sans-serif;
+        background-color: whitesmoke;
+        color: #000;
+        padding: 0 20px;
+        width: 100%;
+        height: 100%;
+        border-radius: 50px;
     }
 
     .proposition {
@@ -392,12 +520,70 @@
         z-index: 5;
     }
 
+    #own_list {
+        margin: 20px 0 0 0;
+    }
+
+    .a_list {
+        position: relative;
+        cursor: pointer;
+        background-color: #34495e65;
+        height: 50px;
+        width: 310px;
+        border-radius: 50px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 6px 0 22px;
+        margin-bottom: 2px;
+    }
+
+    .name_list {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        height: 100%;
+        width: calc(100% - 60px);
+        overflow: hidden;
+        padding-left: 10px;
+        letter-spacing: 1px;
+    }
+
+    .name_list:active {
+        transform: scale(.96);
+    }
+
+    .a_list button {
+        cursor: pointer;
+        height: 100%;
+        width: 50px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 50%;
+        background-color: transparent;
+    }
+
+    .a_list button svg {
+        fill: #F3F3F3;
+        height: 40%;
+        z-index: 5;
+    }
+
+    .a_list button:active {
+        transform: scale(.85);
+    }
+
+    .a_list button:active svg{
+        fill: crimson;
+    }
+
     .reset_list {
         display: flex;
         justify-content: center;
         align-items: center;
         cursor: pointer;
-        margin: 25px 0 0 0;
+        margin: 25px 0;
         height: 50px;
         width: 155px;
         border-radius: 50px;
@@ -460,10 +646,10 @@
         animation: animChoicer2 2.5s ease-in-out backwards;
     }
 
-
     .bounce-enter-active {
         animation: bounce-in 500ms;
     }
+
     @keyframes bounce-in {
         0% {
             transform: scale(0);
@@ -479,6 +665,7 @@
     .delete-item {
         animation: delete-out 500ms forwards;
     }
+
     @keyframes delete-out {
         0% {
             transform: scale(1);
@@ -495,9 +682,11 @@
     .slide-fade-enter-active {
         transition: all 400ms ease-out;
     }
+
     .slide-fade-leave-active {
         transition: all 400ms ease-in;
     }
+
     .slide-fade-enter-from,
     .slide-fade-leave-to {
         transform: translateY(20px);
@@ -560,7 +749,7 @@
             transform: scale(.95);
         }
         100% {
-            transform: scale(1.05);
+            transform: scale(.925);
         }
     }
 </style>
