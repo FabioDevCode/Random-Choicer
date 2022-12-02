@@ -210,6 +210,10 @@
                     this.list_saved = JSON.parse(localStorage.getItem('rc_list_saved'));
                 }
 
+                if(this.list_saved.length < 1) {
+                    this.shower = false;
+                }
+
                 Toastify({
                     text: "Your list has been deleted",
                     duration: 4000,
