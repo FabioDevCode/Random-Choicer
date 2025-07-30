@@ -240,6 +240,10 @@
         margin: 0;
     }
 
+    html, body {
+        overscroll-behavior: none;
+    }
+
     body {
         overflow-x: hidden;
         min-width: 375px;

@@ -15,7 +15,7 @@ export default defineConfig({
         name: 'Random Choicer',
         short_name: 'Choicer',
         description: 'Tire au sort un élément dans une liste personnalisée',
-        theme_color: '#41B883',
+        theme_color: '#181818',
         background_color: '#181818',
         display: 'standalone',
         start_url: '/Random-Choicer/',

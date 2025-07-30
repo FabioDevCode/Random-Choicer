@@ -5,7 +5,7 @@
   "start_url": "/Random-Choicer/",
   "display": "standalone",
   "background_color": "#181818",
-  "theme_color": "#41B883",
+  "theme_color": "#181818",
   "icons": [
     {
       "src": "/Random-Choicer/icon-192x192.png",
