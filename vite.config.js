@@ -18,7 +18,7 @@ export default defineConfig({
         theme_color: '#41B883',
         background_color: '#181818',
         display: 'standalone',
-        start_url: '/',
+        start_url: '/Random-Choicer/',
         icons: [
           {
             src: '/icon-192x192.png',

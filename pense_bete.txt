@@ -1,0 +1,1 @@
+git push --force origin `git subtree split --prefix dist main`:gh-pages
